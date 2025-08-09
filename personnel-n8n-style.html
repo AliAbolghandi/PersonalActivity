@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>پرسنل مکانیک فولادسازی</title>
+  <!-- اضافه کردن کتابخانه تاریخ شمسی -->
+  <link rel="stylesheet" href="https://unpkg.com/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
+  <!-- لینک فونت Yekan از CDN -->
+  <link href="https://cdn.rawgit.com/rastikerdar/vazir-font/v27.2.2/dist/font-face.css" rel="stylesheet" type="text/css" />
+  <style>
+    @font-face {
+      font-family: 'Yekan';
+      src: url('https://cdn.fontcdn.ir/Font/Persian/Yekan/Yekan.eot');
+      src: url('https://cdn.fontcdn.ir/Font/Persian/Yekan/Yekan.eot?#iefix') format('embedded-opentype'),
+           url('https://cdn.fontcdn.ir/Font/Persian/Yekan/Yekan.woff') format('woff'),
+           url('https://cdn.fontcdn.ir/Font/Persian/Yekan/Yekan.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    body {
+      margin: 0;
+      font-family: Yekan, Tahoma, sans-serif;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/6/6b/%D9%BE%D8%A7%D8%AA%DB%8C%D9%84_%D9%85%D9%88%D8%A7%D8%AF_%D9%85%D8%B0%D8%A7%D8%A8.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .header-box {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 30px;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(255, 102, 0, 0.3);
+      border: 1px solid orange;
+    }
+    .form-box {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 20px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 0 20px rgba(255, 102, 0, 0.3);
+      border: 1px solid orange;
+    }
+    h1 {
+      color: orange;
+      font-size: 24px;
+      margin: 0 0 10px 0;
+      font-family: Yekan, Tahoma, sans-serif;
+    }
+    #datetime {
+      font-size: 16px;
+      color: #fff;
+      font-family: Yekan, Tahoma, sans-serif;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      color: #ddd;
+      font-family: Yekan, Tahoma, sans-serif;
+    }
+    input, select, textarea {
+      width: calc(100% - 22px);
+      padding: 10px;
+      border: 1px solid #555;
+      border-radius: 8px;
+      margin-top: 5px;
+      font-family: Yekan, Tahoma, sans-serif;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      box-sizing: border-box;
+    }
+    /* استایل مخصوص کد پرسنلی */
+    #personnelCode {
+      width: 200px;
+      display: block;
+      margin-right: auto;
+      margin-left: auto;
+      text-align: center;
+    }
+    /* استایل placeholder */
+    #personnelCode::placeholder {
+      color: #aaa;
+      opacity: 1;
+      font-family: Yekan, Tahoma, sans-serif;
+    }
+    .hidden {
+      display: none;
+    }
+    button {
+      background: orange;
+      color: #000;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+      font-family: Yekan, Tahoma, sans-serif;
+    }
+    button:hover {
+      background: #ff6600;
+    }
+    /* استایل مخصوص تقویم شمسی */
+    .pwt-datepicker {
+      font-family: Yekan, Tahoma, sans-serif;
+      direction: rtl;
+    }
+    .pwt-datepicker-rtl {
+      direction: rtl;
+      font-family: Yekan, Tahoma, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <!-- باکس هدر جداگانه -->
+  <div class="header-box">
+    <h1>پرسنل مکانیک فولادسازی</h1>
+    <div id="datetime">در حال بارگذاری تاریخ...</div>
+  </div>
+
+  <!-- باکس فرم اصلی -->
+  <div class="form-box">
+    <label for="personnelCode">کد پرسنلی:</label>
+    <input type="text" id="personnelCode" pattern="[0-9]*" inputmode="numeric" placeholder="۱۲۳۴۵۶" maxlength="6" required>
+
+    <label for="activityType">نوع فعالیت:</label>
+    <select id="activityType">
+      <option value="">انتخاب کنید</option>
+      <option value="hourlyLeave">مرخصی ساعتی</option>
+      <option value="dailyLeave">مرخصی روزانه</option>
+      <option value="shiftChange">جابه‌جایی شیفت</option>
+      <option value="overtime">اضافه کاری</option>
+    </select>
+
+    <div id="hourlyLeaveForm" class="hidden">
+      <label>تاریخ:</label>
+      <input type="text" class="persian-date-input">
+      <label>از ساعت:</label>
+      <input type="time">
+      <label>تا ساعت:</label>
+      <input type="time">
+    </div>
+
+    <div id="dailyLeaveForm" class="hidden">
+      <label>از تاریخ:</label>
+      <input type="text" class="persian-date-input">
+      <label>تا تاریخ:</label>
+      <input type="text" class="persian-date-input">
+    </div>
+
+    <div id="shiftChangeForm" class="hidden">
+      <label>نوع جابه‌جایی:</label>
+      <select>
+        <option>بدون جانشین</option>
+        <option>با جانشین</option>
+      </select>
+      <label>نام نفر جانشین:</label>
+      <input type="text">
+      <label>از تاریخ:</label>
+      <input type="text" class="persian-date-input">
+      <label>تا تاریخ:</label>
+      <input type="text" class="persian-date-input">
+    </div>
+
+    <div id="overtimeForm" class="hidden">
+      <label>تاریخ:</label>
+      <input type="text" class="persian-date-input">
+      <label>از ساعت:</label>
+      <input type="time">
+      <label>تا ساعت:</label>
+      <input type="time">
+      <label>علت اضافه کاری:</label>
+      <textarea rows="3"></textarea>
+    </div>
+
+    <button id="submitBtn" class="hidden">ثبت درخواست</button>
+  </div>
+
+  <!-- اضافه کردن کتابخانه‌های مورد نیاز -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/persian-date@1.1.0/dist/persian-date.min.js"></script>
+  <script src="https://unpkg.com/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+
+  <script>
+    // شمسی‌سازی تاریخ با تقویم ایران
+    function toPersianDigits(str) {
+      return str.replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+    }
+    
+    // تابع جدید برای نمایش زمان تهران با ثانیه (با اصلاح افست)
+    function updateDateTime() {
+      const now = new Date();
+      
+      // اصلاح افست برای تهران (UTC+4:30 در زمان تابستانی)
+      const tehranOffset = 1 * 60 * 60 * 1000; // افست تهران 4:30
+      const tehranTime = new Date(now.getTime() + tehranOffset);
+      
+      const localeDate = tehranTime.toLocaleDateString('fa-IR');
+      const time = tehranTime.toLocaleTimeString('fa-IR', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        second: '2-digit'
+      });
+      
+      document.getElementById("datetime").textContent = toPersianDigits(localeDate + ' - ' + time);
+    }
+    
+    // اولین بار زمان را نمایش می‌دهیم
+    updateDateTime();
+    // به روز رسانی هر ثانیه
+    setInterval(updateDateTime, 1000);
+
+    const activityType = document.getElementById("activityType");
+    const forms = {
+      hourlyLeave: document.getElementById("hourlyLeaveForm"),
+      dailyLeave: document.getElementById("dailyLeaveForm"),
+      shiftChange: document.getElementById("shiftChangeForm"),
+      overtime: document.getElementById("overtimeForm")
+    };
+    const submitBtn = document.getElementById("submitBtn");
+
+    activityType.addEventListener("change", () => {
+      Object.values(forms).forEach(f => f.classList.add("hidden"));
+      const selected = activityType.value;
+      if (forms[selected]) {
+        forms[selected].classList.remove("hidden");
+        submitBtn.classList.remove("hidden");
+      } else {
+        submitBtn.classList.add("hidden");
+      }
+    });
+
+    // فعال کردن تقویم شمسی برای تمام فیلدهای تاریخ
+    $(document).ready(function() {
+      $('.persian-date-input').persianDatepicker({
+        format: 'YYYY/MM/DD',
+        observer: true,
+        persianDigit: true,
+        autoClose: true
+      });
+    });
+
+    // جلوگیری از ورود غیر عددی در کد پرسنلی
+    document.getElementById("personnelCode").addEventListener("input", function(e) {
+      this.value = this.value.replace(/[^0-9]/g, '');
+    });
+  </script>
+</body>
+</html>
